@@ -38,11 +38,6 @@ int main(int argc,char* argv[]) {
     cudaMemcpy(aD,a,sizeA,cudaMemcpyHostToDevice);
     cudaMemcpy(bD,b,sizeB,cudaMemcpyHostToDevice);
 
-    dim3 threadsPerBlock(16, 16);
-    unsigned int rowBlocks = std::max(1u,R / threadsPerBlock.x),
-                 colBlocks = std::max(1u,K / threadsPerBlock.y);
-
-    dim3 numBlocks(rowBlocks, colBlocks);
     vecutils::HyperGrid hg = vecutils::evalHyperGrid(R,K,16);
     chronoIt({matMulKernel<<<hg.blocks,hg.threads>>>(aD,bD,cD,R,C,K);})
 

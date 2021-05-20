@@ -56,7 +56,7 @@ Grid evalLinearGrid(int N,int threads) {
 }
 
 HyperGrid evalHyperGrid(int R,int C,int threadsPerSide) {
-    dim3 threadsPerBlock(threadsPerSide, threadsPerSide);
+    dim3 threadsPerBlock(std::max(threadsPerSide,R), std::max(threadsPerSide,C));
     unsigned int rowBlocks = std::max(1u,R / threadsPerBlock.x),
                  colBlocks = std::max(1u,C / threadsPerBlock.y);
 
