@@ -1,7 +1,7 @@
 #include "vec_utils.h"
 #include "chrono_utils.h"
 #include <chrono>
-
+#include <stdio.h>
 
 __global__ void matMulKernel(float* a,float* b,float* c,int R,int C,int K) {
     // tId is the index of the destination element in c to be computed
@@ -11,6 +11,7 @@ __global__ void matMulKernel(float* a,float* b,float* c,int R,int C,int K) {
     // Dot product: tIdx-th row of a times tIdy-th column of b
     // Common lenght equal to C
     if(tIdX >= R || tIdY >= K) return;
+    //printf("I am thread %d,%d in block %d,%d. Computing element: %d,%d\n",threadIdx.x,threadIdx.y,blockIdx.x,blockIdx.y,tIdX,tIdY);
     c[tIdX*K+tIdY] = 0;
     for(int i = 0; i < C; ++i)
         c[tIdX*K+tIdY] += a[tIdX*C+i]*b[i*K+tIdY];

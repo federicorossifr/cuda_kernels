@@ -1,7 +1,7 @@
 #include "vec_utils.h"
 #include "chrono_utils.h"
 #include <chrono>
-
+#include <stdio.h>
 
 __global__ void convKernel(float* a,float* f,float* o,int R,int C,int K,int stride=1) {
     // tId is the index of the destination element in c to be computed
@@ -13,6 +13,7 @@ __global__ void convKernel(float* a,float* f,float* o,int R,int C,int K,int stri
     // Dot product: tIdx-th row of a times tIdy-th column of b
     // Common lenght equal to C
     if(tIdX >= outRows || tIdY >= outCols) return;
+    //printf("I am thread %d,%d in block %d,%d. Computing element: %d,%d\n",threadIdx.x,threadIdx.y,blockIdx.x,blockIdx.y,tIdX,tIdY);
 
     float pinValue = 0;
     for(int i = 0; i < K; ++i)

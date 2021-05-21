@@ -56,12 +56,16 @@ Grid evalLinearGrid(int N,int threads) {
 }
 
 HyperGrid evalHyperGrid(int R,int C,int threadsPerSide) {
-    dim3 threadsPerBlock(std::max(threadsPerSide,R), std::max(threadsPerSide,C));
-    unsigned int rowBlocks = std::max(1u,R / threadsPerBlock.x),
-                 colBlocks = std::max(1u,C / threadsPerBlock.y);
+    dim3 threadsPerBlock(threadsPerSide,threadsPerSide);
+    unsigned int rowBlocks = std::max(1u,(unsigned int)ceil((float)R / (float)threadsPerBlock.x)),
+                 colBlocks = std::max(1u,(unsigned int)ceil((float)C / (float)threadsPerBlock.y));
 
     dim3 numBlocks(rowBlocks, colBlocks);
-
+    #ifndef _VUTILS_SUPPRESS_
+    std::cout << "Requesting grid for " << R << "x" << C << std::endl;
+    std::cout << "Block size: " << threadsPerSide << "x" << threadsPerSide << std::endl;
+    std::cout << "Block count" << rowBlocks << "x" << colBlocks << std::endl;
+    #endif 
     HyperGrid g{numBlocks,threadsPerBlock};
     return g;
 }
