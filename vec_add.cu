@@ -29,9 +29,7 @@ int main(int argc,char* argv[]) {
 
     vecutils::Grid dGrid = vecutils::evalLinearGrid(N,256);
 
-    auto start = now();
     vecAdd<<<dGrid.blocks,dGrid.threads>>>(aD,bD,cD,N);
-    auto end = now();
 
     cudaMemcpy(c,cD,size,cudaMemcpyDeviceToHost);
     vecutils::printVector(c,N,'\t');
